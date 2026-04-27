@@ -27,7 +27,7 @@ func main() {
 	fmt.Printf("Keliling = %.2f\n", hitungKeliling(5))
 	luas, keliling := luasKeliling(5)
 	fmt.Printf("Luas = %.2f\nKeliling = %.2f\n", luas, keliling)
-	segitigaSiku((3))
+	segitigaSiku((5))
 }
 
 // func hello() {
@@ -55,7 +55,7 @@ func main() {
 func segitigaSiku(n int) {
 	for i := 1; i <= n; i++ {
 		for j := 1; j <= i; j++ {
-			fmt.Print(j, " ")
+			fmt.Print("*")
 		}
 		fmt.Println("")
 	}
