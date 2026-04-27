@@ -1,57 +1,126 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
+	"strconv"
+	"strings"
 
 	"github.com/bernaddwiki/koda-b7-go/internals/minitask1"
 	"github.com/bernaddwiki/koda-b7-go/internals/minitask2"
 	"github.com/bernaddwiki/koda-b7-go/internals/minitask3"
+	"github.com/bernaddwiki/koda-b7-go/internals/minitask4"
 )
 
 func main() {
-	fmt.Printf("Luas = %.2f\n", minitask1.HitungLuas(5))
-	fmt.Printf("Keliling = %.2f\n", minitask1.HitungKeliling(5))
-	luas, keliling := minitask1.LuasKeliling(5)
-	fmt.Printf("Luas = %.2f\nKeliling = %.2f\n", luas, keliling)
-	minitask2.SegitigaSiku(5)
-	minitask3.SisipAngkaSlice(88)
+	scanner := bufio.NewScanner(os.Stdin)
 
-	dwiki := user{
-		name:        "Dwiki",
-		image:       "kdsjgakdgakd",
-		email:       "dwiki.adicitra6@gmail.com",
-		age:         22,
-		phoneNumber: "081228669806",
-		isMarried:   false,
-		education: []education{{
-			name:  "Sanata Dharma University",
-			major: "Informatics",
-		},
-		},
+	for {
+		printMenu()
+		fmt.Print("Pilih fitur (0 untuk keluar): ")
+
+		if !scanner.Scan() {
+			fmt.Println("Input tidak tersedia.")
+			return
+		}
+
+		choice, err := strconv.Atoi(strings.TrimSpace(scanner.Text()))
+		if err != nil {
+			fmt.Println("Masukkan angka yang valid.")
+			continue
+		}
+
+		switch choice {
+		case 0:
+			fmt.Println("Keluar. Terima kasih.")
+			return
+		case 1:
+			handleCircleArea(scanner)
+		case 2:
+			handleCircleCircumference(scanner)
+		case 3:
+			handleCircleBoth(scanner)
+		case 4:
+			handleTriangle(scanner)
+		case 5:
+			handleSlice(scanner)
+		case 6:
+			minitask4.DefaultUser().Print()
+		default:
+			fmt.Println("Pilihan tidak tersedia, coba lagi.")
+		}
+
+		fmt.Println()
 	}
-
-	fmt.Println(dwiki.name)
-	fmt.Println(dwiki.image)
-	fmt.Println(dwiki.email)
-	fmt.Println(dwiki.age)
-	fmt.Println(dwiki.phoneNumber)
-	fmt.Println(dwiki.isMarried)
-	fmt.Println(dwiki.education[0].name)
-	fmt.Println(dwiki.education[0].major)
-
 }
 
-type education struct {
-	name  string
-	major string
+func printMenu() {
+	fmt.Println("====== MENU FITUR ======")
+	fmt.Println("1. Hitung luas lingkaran")
+	fmt.Println("2. Hitung keliling lingkaran")
+	fmt.Println("3. Hitung luas dan keliling lingkaran")
+	fmt.Println("4. Tampilkan segitiga siku")
+	fmt.Println("5. Sisip angka ke dalam slice")
+	fmt.Println("6. Tampilkan profil user")
+	fmt.Println("0. Keluar")
+	fmt.Println("========================")
 }
 
-type user struct {
-	name        string
-	image       string
-	email       string
-	age         int
-	phoneNumber string
-	isMarried   bool
-	education   []education
+func handleCircleArea(scanner *bufio.Scanner) {
+	radius := readFloat(scanner, "Masukkan jari-jari lingkaran: ")
+	fmt.Printf("Luas = %.2f\n", minitask1.HitungLuas(radius))
+}
+
+func handleCircleCircumference(scanner *bufio.Scanner) {
+	radius := readFloat(scanner, "Masukkan jari-jari lingkaran: ")
+	fmt.Printf("Keliling = %.2f\n", minitask1.HitungKeliling(radius))
+}
+
+func handleCircleBoth(scanner *bufio.Scanner) {
+	radius := readFloat(scanner, "Masukkan jari-jari lingkaran: ")
+	luas, keliling := minitask1.LuasKeliling(radius)
+	fmt.Printf("Luas = %.2f\nKeliling = %.2f\n", luas, keliling)
+}
+
+func handleTriangle(scanner *bufio.Scanner) {
+	n := readInt(scanner, "Masukkan tinggi segitiga siku: ")
+	minitask2.SegitigaSiku(n)
+}
+
+func handleSlice(scanner *bufio.Scanner) {
+	angka := readInt(scanner, "Masukkan angka yang akan disisipkan: ")
+	minitask3.SisipAngkaSlice(angka)
+}
+
+func readFloat(scanner *bufio.Scanner, prompt string) float32 {
+	for {
+		fmt.Print(prompt)
+		if !scanner.Scan() {
+			fmt.Println("Input tidak tersedia.")
+			return 0
+		}
+		value := strings.TrimSpace(scanner.Text())
+		parsed, err := strconv.ParseFloat(value, 32)
+		if err == nil {
+			return float32(parsed)
+		}
+		fmt.Println("Masukkan angka desimal yang valid.")
+	}
+}
+
+func readInt(scanner *bufio.Scanner, prompt string) int {
+	for {
+		fmt.Print(prompt)
+		if !scanner.Scan() {
+			fmt.Println("Input tidak tersedia.")
+			return 0
+		}
+		value := strings.TrimSpace(scanner.Text())
+		parsed, err := strconv.Atoi(value)
+		if err == nil {
+			return parsed
+		}
+		fmt.Println("Masukkan angka bulat yang valid.")
+	}
 }
