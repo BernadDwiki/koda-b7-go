@@ -70,5 +70,7 @@ func hitungKeliling(r float32) float32 {
 }
 
 func luasKeliling(r float32) (float32, float32) {
-	return hitungLuas(r), hitungKeliling(r)
+	var luas float32 = math.Pi * r * r
+	var keliling float32 = 2 * math.Pi * r
+	return luas, keliling
 }
