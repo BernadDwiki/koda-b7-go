@@ -10,7 +10,9 @@ import (
 	"github.com/bernaddwiki/koda-b7-go/internals/minitask1"
 	"github.com/bernaddwiki/koda-b7-go/internals/minitask2"
 	"github.com/bernaddwiki/koda-b7-go/internals/minitask3"
-	"github.com/bernaddwiki/koda-b7-go/internals/minitask4"
+	"github.com/bernaddwiki/koda-b7-go/internals/minitask6"
+	"github.com/bernaddwiki/koda-b7-go/internals/minitask7"
+	"github.com/bernaddwiki/koda-b7-go/internals/minitask8"
 )
 
 func main() {
@@ -46,7 +48,11 @@ func main() {
 		case 5:
 			handleSlice(scanner)
 		case 6:
-			minitask4.DefaultUser().Print()
+			handleReadFile(scanner)
+		case 7:
+			handlePerson(scanner)
+		case 8:
+			handlePayment(scanner)
 		default:
 			fmt.Println("Pilihan tidak tersedia, coba lagi.")
 		}
@@ -62,7 +68,9 @@ func printMenu() {
 	fmt.Println("3. Hitung luas dan keliling lingkaran")
 	fmt.Println("4. Tampilkan segitiga siku")
 	fmt.Println("5. Sisip angka ke dalam slice")
-	fmt.Println("6. Tampilkan profil user")
+	fmt.Println("6. Baca file dengan aman")
+	fmt.Println("7. Demo Person")
+	fmt.Println("8. Demo Pembayaran")
 	fmt.Println("0. Keluar")
 	fmt.Println("========================")
 }
@@ -123,4 +131,42 @@ func readInt(scanner *bufio.Scanner, prompt string) int {
 		}
 		fmt.Println("Masukkan angka bulat yang valid.")
 	}
+}
+
+func handleReadFile(scanner *bufio.Scanner) {
+	minitask6.SafeReadFile("internals/minitask6/text.txt")
+	minitask6.SafeReadFile("internals/minitask6/salah.txt")
+	minitask6.SafeReadFile(".")
+}
+
+func handlePerson(scanner *bufio.Scanner) {
+	person := minitask7.NewPerson("Dwiki", "Legenda Wisata", "0861562112")
+	person.Print()
+	person.Greet()
+	person.SetName("Bernad")
+	person.Greet()
+}
+
+func handlePayment(scanner *bufio.Scanner) {
+	prices := []float64{10000, 20000, 5000}
+
+	var bankPayment minitask8.Pembayaran = minitask8.Bank{}
+	bankPayment.Transfer(prices)
+
+	var onlineBankPayment minitask8.Pembayaran = minitask8.OnlineBank{}
+	onlineBankPayment.Transfer(prices)
+
+	mock := &minitask8.MockPayment{}
+	err := mock.Transfer(prices)
+	if err != nil {
+		fmt.Println("Error:", err)
+	}
+
+	err = mock.Transfer([]float64{-100})
+	if err != nil {
+		fmt.Println("Error:", err)
+	}
+
+	fmt.Println("\nData Pembayaran Fiktif:")
+	fmt.Println(mock.History)
 }
