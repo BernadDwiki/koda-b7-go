@@ -8,9 +8,9 @@ import (
 func main() {
 	var wg sync.WaitGroup
 
-	chanInput := make(chan int, 1)
-	chanGenap := make(chan []int, 1)
-	chanKuadrat := make(chan []int, 1)
+	chanInput := make(chan int)
+	chanGenap := make(chan []int)
+	chanKuadrat := make(chan []int)
 
 	wg.Add(3)
 	go generateAngka(chanInput, chanGenap, &wg)
